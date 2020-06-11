@@ -42,8 +42,10 @@ public class ConfigHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Files.delete(sourceConfigPath);
+                initConfig();
+                config.save(rootNode);
             }
-            Files.delete(sourceConfigPath);
         }
 
         if (configExists) {

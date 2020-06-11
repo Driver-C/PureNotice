@@ -3,12 +3,11 @@ package com.github.driver_c.purenotice;
 
 import java.io.File;
 import org.slf4j.Logger;
-import java.nio.file.Path;
 import java.io.IOException;
 import com.google.inject.Inject;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import com.github.driver_c.purenotice.config.ConfigHandler;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
@@ -29,10 +28,6 @@ public class PureNotice {
     private Logger logger;
 
     @Inject
-    @ConfigDir(sharedRoot = false)
-    private Path configDir;
-
-    @Inject
     @DefaultConfig(sharedRoot = false)
     private File defaultConfig;
 
@@ -47,6 +42,17 @@ public class PureNotice {
             e.printStackTrace();
         }
         this.logger.info("\u00A7aPureNotice loaded.\u00A7r");
+    }
+
+    @Listener
+    public void onServerReload(GameReloadEvent event) {
+        this.logger.info("\u00A7aPureNotice is reloading.\u00A7r");
+        try {
+            this.configHandler.load(defaultConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.logger.info("\u00A7aPureNotice reloaded.\u00A7r");
     }
 
     @Listener
