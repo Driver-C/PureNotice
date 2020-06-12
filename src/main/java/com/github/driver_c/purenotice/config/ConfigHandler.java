@@ -60,6 +60,8 @@ public class ConfigHandler {
     private void initConfig() {
         rootNode.getNode("main", "version").setComment("Do not change version!!!");
         rootNode.getNode("main", "version").setValue(configVersion);
+        rootNode.getNode("main", "first_notice_delay").setValue(10);
+        rootNode.getNode("main", "interval").setValue(120);
         rootNode.getNode("messages", "msg1", "message").setValue(
                 "Thanks for using PureNotice, this is a default message"
         );
