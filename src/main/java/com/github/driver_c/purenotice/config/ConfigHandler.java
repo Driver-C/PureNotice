@@ -26,7 +26,12 @@ public class ConfigHandler {
         rootNode = config.load();
         boolean configExists = defaultConfig.createNewFile();
 
-        if (!configExists) {
+        if (configExists) {
+            initConfig();
+            config.save(rootNode);
+            this.plugin.getLogger().info("This may be the first running. Config initialized");
+        } else {
+            this.plugin.getLogger().info("Config already exists. No initialization required");
             String configVersionNow = rootNode.getNode("main", "version").getString();
             File backupConfig = new File(
                     defaultConfig.getParent() + "/" + defaultConfig.getName() + "_old"
@@ -47,23 +52,15 @@ public class ConfigHandler {
                 config.save(rootNode);
             }
         }
-
-        if (configExists) {
-            initConfig();
-            config.save(rootNode);
-            this.plugin.getLogger().info("This may be the first running. Config initialized");
-        } else {
-            this.plugin.getLogger().info("Config already exists. No initialization required");
-        }
     }
 
     private void initConfig() {
         rootNode.getNode("main", "version").setComment("Do not change version!!!");
         rootNode.getNode("main", "version").setValue(configVersion);
-        rootNode.getNode("main", "first_notice_delay").setValue(10);
+        rootNode.getNode("main", "firstDelay").setValue(10);
         rootNode.getNode("main", "interval").setValue(120);
         rootNode.getNode("messages", "msg1", "message").setValue(
-                "Thanks for using PureNotice, this is a default message"
+                "&eThanks for using PureNotice, this is a default message"
         );
     }
 }
