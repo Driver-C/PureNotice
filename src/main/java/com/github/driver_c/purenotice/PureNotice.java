@@ -35,43 +35,48 @@ public class PureNotice {
     private File defaultConfig;
 
     private final ConfigHandler configHandler = new ConfigHandler(this);
-    private final AutoNotice autoNotice = new AutoNotice(this);
-
     private Task autoNoticeTask;
 
     @Listener
     public void onServerStarted(GameStartedServerEvent event) {
         this.logger.info("\u00A7aPureNotice is loading.\u00A7r");
-        try {
-            this.configHandler.load(defaultConfig);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.autoNoticeTask = autoNotice.submit();
+        configLoad();
+        taskInit();
         this.logger.info("\u00A7aPureNotice loaded.\u00A7r");
     }
 
     @Listener
     public void onServerReload(GameReloadEvent event) {
         this.logger.info("\u00A7aPureNotice is reloading.\u00A7r");
-        if (this.autoNoticeTask != null) {
-            this.autoNoticeTask.cancel();
-        }
-        try {
-            this.configHandler.load(defaultConfig);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.autoNoticeTask = autoNotice.submit();
+        configLoad();
+        taskInit();
         this.logger.info("\u00A7aPureNotice reloaded.\u00A7r");
     }
 
     @Listener
     public void onServerStopping(GameStoppingServerEvent event) {
+        taskDown();
+        this.logger.info("\u00A7cPureNotice is disabled.\u00A7r");
+    }
+
+    private void configLoad() {
+        try {
+            this.configHandler.load(defaultConfig);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void taskInit() {
+        taskDown();
+        AutoNotice autoNotice = new AutoNotice(this);
+        this.autoNoticeTask = autoNotice.submit();
+    }
+
+    private void taskDown() {
         if (this.autoNoticeTask != null) {
             this.autoNoticeTask.cancel();
         }
-        this.logger.info("\u00A7cPureNotice is disabled.\u00A7r");
     }
 
     public Logger getLogger() {

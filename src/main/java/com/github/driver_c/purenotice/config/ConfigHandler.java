@@ -59,8 +59,11 @@ public class ConfigHandler {
         rootNode.getNode("main", "version").setValue(configVersion);
         rootNode.getNode("main", "firstDelay").setValue(10);
         rootNode.getNode("main", "interval").setValue(120);
-        rootNode.getNode("messages", "msg1", "message").setValue(
-                "&eThanks for using PureNotice, this is a default message"
+        rootNode.getNode("messages", "1", "message").setValue(
+                "&eThanks for using &aPureNotice&e, this is a default message 1."
+        );
+        rootNode.getNode("messages", "2", "message").setValue(
+                "&eThanks for using &aPureNotice&e, this is a default message 2."
         );
     }
 }
