@@ -57,8 +57,11 @@ public class ConfigHandler {
     private void initConfig() {
         rootNode.getNode("main", "version").setComment("Do not change version!!!");
         rootNode.getNode("main", "version").setValue(configVersion);
-        rootNode.getNode("main", "firstDelay").setValue(10);
+        rootNode.getNode("main", "prefix").setValue("&e[&aPureNotice&e]&r");
+        rootNode.getNode("main", "language").setValue("en_US");
+        rootNode.getNode("main", "firstDelay").setValue(30);
         rootNode.getNode("main", "interval").setValue(120);
+        rootNode.getNode("main", "random").setValue(false);
         rootNode.getNode("messages", "1", "message").setValue(
                 "&eThanks for using &aPureNotice&e, this is a default message 1."
         );
