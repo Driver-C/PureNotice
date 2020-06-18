@@ -20,7 +20,7 @@ public class ConfigHandler {
         this.plugin = plugin;
     }
 
-    public void load(File defaultConfig) throws IOException {
+    public void load(File defaultConfig, Path configDir) throws IOException {
         ConfigurationLoader<CommentedConfigurationNode> config =
                 HoconConfigurationLoader.builder().setFile(defaultConfig).build();
         rootNode = config.load();
@@ -29,9 +29,19 @@ public class ConfigHandler {
         if (configExists) {
             initConfig();
             config.save(rootNode);
-            this.plugin.getLogger().info("This may be the first running. Config initialized");
+            LanguageConfig languageConfig = new LanguageConfig(this.plugin);
+            languageConfig.load(configDir);
+
+            this.plugin.getLogger().info(
+                    LanguageConfig.rootNode.getNode("messages", "firstRun").getString()
+            );
         } else {
-            this.plugin.getLogger().info("Config already exists. No initialization required");
+            LanguageConfig languageConfig = new LanguageConfig(this.plugin);
+            languageConfig.load(configDir);
+
+            this.plugin.getLogger().info(
+                    LanguageConfig.rootNode.getNode("messages", "noInit").getString()
+            );
             String configVersionNow = rootNode.getNode("main", "version").getString();
             File backupConfig = new File(
                     defaultConfig.getParent() + "/" + defaultConfig.getName() + "_old"
@@ -42,7 +52,7 @@ public class ConfigHandler {
                 try {
                     Files.copy(sourceConfigPath, destinationConfigPath, StandardCopyOption.REPLACE_EXISTING);
                     this.plugin.getLogger().warn(
-                            "Config is out of date, The old config has been overwritten and saved to the config directory"
+                            LanguageConfig.rootNode.getNode("messages", "configOut").getString()
                     );
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -57,16 +67,31 @@ public class ConfigHandler {
     private void initConfig() {
         rootNode.getNode("main", "version").setComment("Do not change version!!!");
         rootNode.getNode("main", "version").setValue(configVersion);
-        rootNode.getNode("main", "prefix").setValue("&e[&aPureNotice&e]&r");
-        rootNode.getNode("main", "language").setValue("en_US");
-        rootNode.getNode("main", "firstDelay").setValue(30);
-        rootNode.getNode("main", "interval").setValue(120);
-        rootNode.getNode("main", "random").setValue(false);
+        rootNode.getNode("main", "prefix").setValue(
+                rootNode.getNode("main", "prefix").getString("&e[&aPureNotice&e]&r")
+        );
+        rootNode.getNode("main", "language").setComment("en_US or zh_CN");
+        rootNode.getNode("main", "language").setValue(
+                rootNode.getNode("main", "language").getString("en_US")
+        );
+        rootNode.getNode("main", "firstDelay").setValue(
+                rootNode.getNode("main", "firstDelay").getInt(30)
+        );
+        rootNode.getNode("main", "interval").setValue(
+                rootNode.getNode("main", "interval").getInt(120)
+        );
+        rootNode.getNode("main", "random").setValue(
+                rootNode.getNode("main", "random").getBoolean(false)
+        );
         rootNode.getNode("messages", "1", "message").setValue(
-                "&eThanks for using &aPureNotice&e, this is a default message 1."
+                rootNode.getNode("messages", "1", "message").getString(
+                        "&eThanks for using &aPureNotice&e, this is a default message 1."
+                )
         );
         rootNode.getNode("messages", "2", "message").setValue(
-                "&eThanks for using &aPureNotice&e, this is a default message 2."
+                rootNode.getNode("messages", "2", "message").getString(
+                        "&eThanks for using &aPureNotice&e, this is a default message 2."
+                )
         );
     }
 }

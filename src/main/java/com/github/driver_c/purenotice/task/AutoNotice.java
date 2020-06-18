@@ -3,7 +3,6 @@ package com.github.driver_c.purenotice.task;
 
 import com.github.driver_c.purenotice.config.ConfigHandler;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.slf4j.Logger;
 import org.spongepowered.api.scheduler.Task;
 import com.github.driver_c.purenotice.PureNotice;
 import org.spongepowered.api.text.channel.MessageChannel;
@@ -34,8 +33,6 @@ public class AutoNotice {
     }
 
     public Task submit() {
-        Logger logger = this.plugin.getLogger();
-        logger.info(String.valueOf(this.messageList));
         int interval = ConfigHandler.rootNode.getNode("main", "interval").getInt();
         int delay = ConfigHandler.rootNode.getNode("main", "firstDelay").getInt();
         return Task.builder()

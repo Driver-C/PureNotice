@@ -1,9 +1,12 @@
 package com.github.driver_c.purenotice.command;
 
 import com.github.driver_c.purenotice.PureNotice;
+import com.github.driver_c.purenotice.config.LanguageConfig;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.text.Text;
+
+import java.util.Objects;
 
 public class CommandMain {
     private PureNotice plugin;
@@ -13,21 +16,32 @@ public class CommandMain {
     }
 
     public final CommandSpec pureNoticeReload = CommandSpec.builder()
-            .description(Text.of("Reload this plugin."))
+            .description(Text.of(Objects.requireNonNull(
+                    LanguageConfig.rootNode.getNode("messages", "commandReloadDesc").getString()
+            )))
             .permission("pn.command.admin.reload")
             .executor((src, args) -> {
-                src.sendMessage(Text.of("\u00A7aPureNotice is reloading.\u00A7r"));
-                this.plugin.allInit();
-                src.sendMessage(Text.of("\u00A7aPureNotice reloaded.\u00A7r"));
+                src.sendMessage(Text.of(Objects.requireNonNull(
+                        LanguageConfig.rootNode.getNode("messages", "reloading").getString()
+                )));
+                this.plugin.configInit();
+                this.plugin.taskInit();
+                src.sendMessage(Text.of(Objects.requireNonNull(
+                        LanguageConfig.rootNode.getNode("messages", "reloaded").getString()
+                )));
                 return CommandResult.success();
             })
             .build();
 
     public final CommandSpec pureNotice = CommandSpec.builder()
-            .description(Text.of("PureNotice Version."))
+            .description(Text.of(Objects.requireNonNull(
+                    LanguageConfig.rootNode.getNode("messages", "commandMainDesc").getString()
+            )))
             .permission("pn.command.client.main")
             .executor((src, args) -> {
-                src.sendMessage(Text.of("PureNotice version:" + PureNotice.VERSION));
+                src.sendMessage(Text.of(Objects.requireNonNull(
+                        LanguageConfig.rootNode.getNode("messages", "commandMain").getString()
+                ) + PureNotice.VERSION));
                 return CommandResult.success();
             })
             .child(pureNoticeReload, "reload")

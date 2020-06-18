@@ -4,11 +4,15 @@ package com.github.driver_c.purenotice;
 import java.io.File;
 
 import com.github.driver_c.purenotice.command.CommandMain;
+import com.github.driver_c.purenotice.config.LanguageConfig;
 import com.github.driver_c.purenotice.task.AutoNotice;
 import org.slf4j.Logger;
 import java.io.IOException;
+import java.nio.file.Path;
+
 import com.google.inject.Inject;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.plugin.Plugin;
@@ -36,11 +40,13 @@ public class PureNotice {
     private Logger logger;
 
     @Inject
+    @ConfigDir(sharedRoot = false)
+    public Path configDir;
+
+    @Inject
     @DefaultConfig(sharedRoot = false)
     private File defaultConfig;
 
-    private final ConfigHandler configHandler = new ConfigHandler(this);
-    private final CommandMain commandMain = new CommandMain(this);
     private Task autoNoticeTask;
 
     @Listener
@@ -50,34 +56,46 @@ public class PureNotice {
 
     @Listener
     public void onServerStarted(GameStartedServerEvent event) {
-        this.logger.info("\u00A7aPureNotice is loading.\u00A7r");
-        allInit();
+        this.logger.info(
+                LanguageConfig.rootNode.getNode("messages", "loading").getString()
+        );
+        taskInit();
         commandInit();
-        this.logger.info("\u00A7aPureNotice loaded.\u00A7r");
+        this.logger.info(
+                LanguageConfig.rootNode.getNode("messages", "loaded").getString()
+        );
     }
 
     @Listener
     public void onServerReload(GameReloadEvent event) {
-        this.logger.info("\u00A7aPureNotice is reloading.\u00A7r");
-        allInit();
-        this.logger.info("\u00A7aPureNotice reloaded.\u00A7r");
+        this.logger.info(
+                LanguageConfig.rootNode.getNode("messages", "reloading").getString()
+        );
+        configInit();
+        taskInit();
+        this.logger.info(
+                LanguageConfig.rootNode.getNode("messages", "reloaded").getString()
+        );
     }
 
     @Listener
     public void onServerStopping(GameStoppingServerEvent event) {
         taskDown();
-        this.logger.info("\u00A7cPureNotice is disabled.\u00A7r");
+        this.logger.info(
+                LanguageConfig.rootNode.getNode("messages", "disabled").getString()
+        );
     }
 
-    private void configInit() {
+    public void configInit() {
+        ConfigHandler configHandler = new ConfigHandler(this);
         try {
-            this.configHandler.load(defaultConfig);
+            configHandler.load(defaultConfig, configDir);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void taskInit() {
+    public void taskInit() {
         taskDown();
         AutoNotice autoNotice = new AutoNotice(this);
         this.autoNoticeTask = autoNotice.submit();
@@ -90,12 +108,10 @@ public class PureNotice {
     }
 
     private void commandInit() {
-        Sponge.getCommandManager().register(this, this.commandMain.pureNotice,"purenotice", "pn");
-    }
-
-    public void allInit() {
-        configInit();
-        taskInit();
+        CommandMain commandMain = new CommandMain(this);
+        Sponge.getCommandManager().register(
+                this, commandMain.pureNotice,"purenotice", "pn"
+        );
     }
 
     public Logger getLogger() {
