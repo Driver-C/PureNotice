@@ -16,17 +16,17 @@ public class LanguageConfig {
     public final static String configVersion = "1.0";
     private final PureNotice plugin;
     public static CommentedConfigurationNode rootNode;
-    private final String language_str;
+    private final String languageStr;
 
     public LanguageConfig(PureNotice plugin) {
         this.plugin = plugin;
-        this.language_str = ConfigHandler.rootNode.getNode("main", "language").getString();
+        this.languageStr = ConfigHandler.rootNode.getNode("main", "language").getString();
     }
 
     public void load(Path configDir) throws IOException {
         Path languagePath = Paths.get(configDir.toString(), "lang");
         File languageFile = Paths.get(
-                languagePath.toString(), this.language_str + ".conf"
+                languagePath.toString(), this.languageStr + ".conf"
         ).toFile();
         ConfigurationLoader<CommentedConfigurationNode> config =
                 HoconConfigurationLoader.builder().setFile(languageFile).build();
@@ -49,7 +49,7 @@ public class LanguageConfig {
     }
 
     private void initConfig() {
-        if (this.language_str.equals("en_US")) {
+        if (this.languageStr.equals("en_US")) {
             rootNode.getNode("main", "version").setComment("Do not change version!!!");
             rootNode.getNode("main", "version").setValue(configVersion);
             rootNode.getNode("messages", "loading").setValue(
@@ -112,7 +112,7 @@ public class LanguageConfig {
                             "Language config is out of date, it has been overwritten."
                     )
             );
-        } else if (this.language_str.equals("zh_CN")) {
+        } else if (this.languageStr.equals("zh_CN")) {
             rootNode.getNode("main", "version").setComment("不要更改配置版本号！！！");
             rootNode.getNode("main", "version").setValue(configVersion);
             rootNode.getNode("messages", "loading").setValue(
