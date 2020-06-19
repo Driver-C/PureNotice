@@ -51,12 +51,12 @@ public class ConfigHandler {
             if (!configVersion.equals(configVersionNow)) {
                 try {
                     Files.copy(sourceConfigPath, destinationConfigPath, StandardCopyOption.REPLACE_EXISTING);
-                    this.plugin.getLogger().warn(
-                            LanguageConfig.rootNode.getNode("messages", "configOut").getString()
-                    );
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                this.plugin.getLogger().warn(
+                        LanguageConfig.rootNode.getNode("messages", "configOut").getString()
+                );
                 Files.delete(sourceConfigPath);
                 initConfig();
                 config.save(rootNode);
