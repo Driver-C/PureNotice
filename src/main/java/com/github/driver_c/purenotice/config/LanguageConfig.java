@@ -82,6 +82,16 @@ public class LanguageConfig {
                             "\u00A7aPureNotice\u00A7r version:"
                     )
             );
+            rootNode.getNode("messages", "commandMainAuthors").setValue(
+                    rootNode.getNode("messages", "commandMainAuthors").getString(
+                            "\u00A7aPureNotice\u00A7r authors: \u00A7a\u00A7l"
+                    )
+            );
+            rootNode.getNode("messages", "commandMainHelp").setValue(
+                    rootNode.getNode("messages", "commandMainHelp").getString(
+                            "\u00A7cpurenotice(pn) reload \u00A7fReload PureNotice"
+                    )
+            );
             rootNode.getNode("messages", "commandMainDesc").setValue(
                     rootNode.getNode("messages", "commandMainDesc").getString(
                             "Main."
@@ -104,7 +114,8 @@ public class LanguageConfig {
             );
             rootNode.getNode("messages", "configOut").setValue(
                     rootNode.getNode("messages", "configOut").getString(
-                            "Config is out of date, config has been overwritten and the older has been saved to the config directory."
+                            "Config is out of date, config has been overwritten and" +
+                                    " the older has been saved to the config directory."
                     )
             );
             rootNode.getNode("messages", "languageOverWritten").setValue(
@@ -143,6 +154,16 @@ public class LanguageConfig {
             rootNode.getNode("messages", "commandMain").setValue(
                     rootNode.getNode("messages", "commandMain").getString(
                             "\u00A7aPureNotice\u00A7r 版本："
+                    )
+            );
+            rootNode.getNode("messages", "commandMainAuthors").setValue(
+                    rootNode.getNode("messages", "commandMainAuthors").getString(
+                            "\u00A7aPureNotice\u00A7r 作者：\u00A7a\u00A7l"
+                    )
+            );
+            rootNode.getNode("messages", "commandMainHelp").setValue(
+                    rootNode.getNode("messages", "commandMainHelp").getString(
+                            "\u00A7cpurenotice(pn) reload \u00A7f重载PureNotice"
                     )
             );
             rootNode.getNode("messages", "commandMainDesc").setValue(

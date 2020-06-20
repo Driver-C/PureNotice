@@ -39,9 +39,13 @@ public class CommandMain {
             )))
             .permission("pn.command.client.main")
             .executor((src, args) -> {
-                src.sendMessage(Text.of(Objects.requireNonNull(
+                src.sendMessage(Text.of(
                         LanguageConfig.rootNode.getNode("messages", "commandMain").getString()
-                ) + PureNotice.VERSION));
+                                + PureNotice.VERSION + "\n"
+                                + LanguageConfig.rootNode.getNode("messages", "commandMainAuthors").getString()
+                                + PureNotice.AUTHORS + "\n"
+                                + LanguageConfig.rootNode.getNode("messages", "commandMainHelp").getString()
+                ));
                 return CommandResult.success();
             })
             .child(pureNoticeReload, "reload")

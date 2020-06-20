@@ -5,9 +5,13 @@ import com.github.driver_c.purenotice.config.ConfigHandler;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.spongepowered.api.scheduler.Task;
 import com.github.driver_c.purenotice.PureNotice;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.SecureRandom;
 import java.util.Comparator;
 import java.util.List;
@@ -45,7 +49,46 @@ public class AutoNotice {
                             + ConfigHandler.rootNode.getNode(
                                     "messages", this.messageList.get(this.index), "message"
                     ).getString();
-                    MessageChannel.TO_ALL.send(TextSerializers.FORMATTING_CODE.deserialize(message));
+                    Text.Builder messageTextBuilder = TextSerializers.FORMATTING_CODE.deserialize(message).toBuilder();
+
+                    String hover = ConfigHandler.rootNode.getNode(
+                            "messages", this.messageList.get(this.index), "hover"
+                    ).getString("nothing");
+                    String click = ConfigHandler.rootNode.getNode(
+                            "messages", this.messageList.get(this.index), "click"
+                    ).getString("nothing");
+                    String shiftInsert = ConfigHandler.rootNode.getNode(
+                            "messages", this.messageList.get(this.index), "shiftInsert"
+                    ).getString("nothing");
+                    String clickUrl = ConfigHandler.rootNode.getNode(
+                            "messages", this.messageList.get(this.index), "clickUrl"
+                    ).getString("nothing");
+
+                    if (!hover.equals("nothing")) {
+                        messageTextBuilder.onHover(TextActions.showText(
+                                TextSerializers.FORMATTING_CODE.deserialize(hover)
+                        ));
+                    }
+                    if ((!click.equals("nothing")) && (!clickUrl.equals("nothing"))) {
+                        messageTextBuilder.onClick(TextActions.runCommand(click));
+                    } else {
+                        if (!click.equals("nothing")) {
+                            messageTextBuilder.onClick(TextActions.runCommand(click));
+                        }
+                        if (!clickUrl.equals("nothing")) {
+                            try {
+                                messageTextBuilder.onClick(TextActions.openUrl(new URL(clickUrl)));
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    if (!shiftInsert.equals("nothing")) {
+                        messageTextBuilder.onShiftClick(TextActions.insertText(shiftInsert));
+                    }
+                    Text messageText = messageTextBuilder.build();
+
+                    MessageChannel.TO_ALL.send(messageText);
                     counter();
                 })
                 .interval(interval, TimeUnit.SECONDS)

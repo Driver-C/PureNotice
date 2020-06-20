@@ -35,6 +35,7 @@ import org.spongepowered.api.scheduler.Task;
 public class PureNotice {
 
     public final static String VERSION = "1.0.0";
+    public final static String AUTHORS = "Driver_C";
 
     @Inject
     private Logger logger;
