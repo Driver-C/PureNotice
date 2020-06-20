@@ -89,7 +89,7 @@ public class LanguageConfig {
             );
             rootNode.getNode("messages", "commandMainHelp").setValue(
                     rootNode.getNode("messages", "commandMainHelp").getString(
-                            "\u00A7cpurenotice(pn) reload \u00A7fReload PureNotice"
+                            "\u00A7epurenotice(pn) reload \u00A7fReload PureNotice"
                     )
             );
             rootNode.getNode("messages", "commandMainDesc").setValue(
@@ -163,7 +163,7 @@ public class LanguageConfig {
             );
             rootNode.getNode("messages", "commandMainHelp").setValue(
                     rootNode.getNode("messages", "commandMainHelp").getString(
-                            "\u00A7cpurenotice(pn) reload \u00A7f重载PureNotice"
+                            "\u00A7epurenotice(pn) reload \u00A7f重载PureNotice"
                     )
             );
             rootNode.getNode("messages", "commandMainDesc").setValue(
