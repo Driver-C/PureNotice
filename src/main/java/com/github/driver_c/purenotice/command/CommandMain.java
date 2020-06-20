@@ -45,7 +45,7 @@ public class CommandMain {
                                 + LanguageConfig.rootNode.getNode("messages", "commandMainAuthors").getString()
                                 + PureNotice.AUTHORS + "\n" + "--------------------\n"
                                 + LanguageConfig.rootNode.getNode("messages", "commandMainHelp").getString()
-                                + "--------------------\n"
+                                + "\n--------------------\n"
                 ));
                 return CommandResult.success();
             })
